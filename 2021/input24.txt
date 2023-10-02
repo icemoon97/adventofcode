@@ -1,0 +1,314 @@
+# 1st
+inp w
+mul x 0
+add x z
+mod x 26
+div z 1
+add x 11
+eql x w
+eql x 0
+# x = 1
+mul y 0
+add y 25
+mul y x
+# y = 25
+add y 1
+mul z y
+# z = 0
+mul y 0
+add y w
+add y 1
+mul y x
+# y = w + 1
+add z y
+
+# x = 1
+# y = 1st input + 1
+# z = 1st input + 1
+
+# 2nd
+inp w
+mul x 0
+add x z
+mod x 26
+# x = 1st input + 1
+div z 1
+add x 11
+# x = 1st input + 12
+eql x w
+eql x 0
+# x = 1
+mul y 0
+add y 25
+mul y x
+add y 1
+# y = 26
+mul z y
+# z = (1st + 1) * 26
+mul y 0
+add y w
+add y 11
+mul y x
+# y = 2nd + 11
+add z y
+
+# x = 1
+# y = 2nd + 11
+# z = (1st + 1) * 26 + 2nd + 11
+
+# 3rd
+inp w
+mul x 0
+add x z
+mod x 26
+div z 1
+add x 14
+eql x w
+eql x 0
+# x = 1
+mul y 0
+add y 25
+mul y x
+add y 1
+# y = 26
+mul z y
+mul y 0
+add y w
+add y 1
+mul y x
+# y = 3rd + 1
+add z y
+
+# z = (z * 26) + 3rd + 1
+
+# 4th
+inp w
+mul x 0
+add x z
+mod x 26
+div z 1
+add x 11
+eql x w
+eql x 0
+# x = 1
+mul y 0
+add y 25
+mul y x
+add y 1
+# y = 26
+mul z y
+mul y 0
+add y w
+add y 11
+mul y x
+add z y
+
+# z = (z * 26) + 4th + 11
+
+# 5th
+inp w
+mul x 0
+add x z
+mod x 26
+# x = z % 26
+div z 26
+# z /= 26
+add x -8
+eql x w
+# (z % 26 - 8) == 5th
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+
+mul z y
+mul y 0
+add y w
+add y 2
+mul y x
+add z y
+
+# 6th
+inp w
+mul x 0
+add x z
+mod x 26
+div z 26
+add x -5
+eql x w
+# (z % 26 - 5) == 6th
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 9
+mul y x
+add z y
+
+# 7th
+inp w
+mul x 0
+add x z
+mod x 26
+div z 1
+add x 11
+eql x w
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 7
+mul y x
+add z y
+# done
+
+# 8th
+inp w
+mul x 0
+add x z
+mod x 26
+div z 26
+add x -13
+# (z % 26 - 13) == 8th
+eql x w
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 11
+mul y x
+add z y
+
+# 9th
+inp w
+mul x 0
+add x z
+mod x 26
+div z 1
+add x 12
+eql x w
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 6
+mul y x
+add z y
+
+# 10th
+inp w
+mul x 0
+add x z
+mod x 26
+div z 26
+add x -1
+eql x w
+# (z % 26 - 1) == 10th
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 15
+mul y x
+add z y
+
+# 11th
+inp w
+mul x 0
+add x z
+mod x 26
+div z 1
+add x 14
+eql x w
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 7
+mul y x
+add z y
+
+# 12th
+inp w
+mul x 0
+add x z
+mod x 26
+div z 26
+add x -5
+eql x w
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 1
+mul y x
+add z y
+
+# 13th
+inp w
+mul x 0
+add x z
+mod x 26
+div z 26
+add x -4
+eql x w
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 8
+mul y x
+add z y
+
+# 14th
+inp w
+mul x 0
+add x z
+mod x 26
+div z 26
+add x -8
+eql x w
+eql x 0
+mul y 0
+add y 25
+mul y x
+add y 1
+mul z y
+mul y 0
+add y w
+add y 6
+mul y x
+add z y
