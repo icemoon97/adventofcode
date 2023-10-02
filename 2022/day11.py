@@ -1,4 +1,6 @@
-import math
+from helper import *
+from math import prod
+from copy import deepcopy
 
 with open("input11.txt", "r") as file:
 	data = file.read().split("\n\n")
@@ -20,34 +22,37 @@ for group in data:
     
     m = Monkey()
 
-    m.holds = [int(x) for x in group[1].split(":")[1].split(",")]
+    m.holds = parse_ints(group[1])
     m.op = eval("lambda old: " + group[2].split("=")[1])
-    m.test = int(group[3].split()[3])
-    m.true_next = int(group[4].split()[5])
-    m.false_next = int(group[5].split()[5])
+    m.test = parse_ints(group[3])[0]
+    m.true_next = parse_ints(group[4])[0]
+    m.false_next = parse_ints(group[5])[0]
 
     monkeys.append(m)
 
-factor = math.prod([m.test for m in monkeys])
+factor = prod([m.test for m in monkeys])
 
-def run_round(monkeys):
+def run_round(monkeys, part2=True):
     for m in monkeys:
         while len(m.holds) > 0:
             worry = m.holds.pop(0)
             worry = m.op(worry)
 
-            # worry = worry // 3
-            worry %= factor
+            if part2:
+                worry %= factor
+            else:
+                worry = worry // 3
 
             m_next = m.true_next if worry % m.test == 0 else m.false_next
             monkeys[m_next].holds.append(worry)
 
             m.count += 1
 
-for i in range(10000):
-    run_round(monkeys)
+def monkey_business(monkeys, part2=True):
+    for _ in range(10000 if part2 else 20):
+        run_round(monkeys, part2=part2)
 
-def monkey_business(monkeys):
-    return math.prod(sorted([m.count for m in monkeys], reverse=True)[:2])
+    return prod(sorted([m.count for m in monkeys], reverse=True)[:2])
 
-print("Part 2:", monkey_business(monkeys))
+print("Part 1:", monkey_business(deepcopy(monkeys), part2=False))
+print("Part 2:", monkey_business(deepcopy(monkeys)))

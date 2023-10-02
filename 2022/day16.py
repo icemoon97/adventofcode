@@ -1,5 +1,5 @@
-import itertools
 from helper import *
+import itertools
 
 import time
 start_time = time.time()
@@ -56,17 +56,17 @@ def search(minutes, pos, open, released, cache):
 part1 = search(30, "AA", 0, 0, {})
 print("Part 1:", max(part1.values()))
 
-print(f"Time since start: {time.time() - start_time:.2f}s")
+# print(f"Time since start: {time.time() - start_time:.2f}s")
 
 part2 = search(26, "AA", 0, 0, {})
-print(f"Time since start: {time.time() - start_time:.2f}s")
+# print(f"Time since start: {time.time() - start_time:.2f}s")
 best = 0
 for me, elephant in itertools.product(part2.items(), part2.items()):
     if not (me[0] & elephant[0]):
         best = max(best, me[1] + elephant[1])
 print("Part 2:", best)
 
-print(f"Time since start: {time.time() - start_time:.2f}s")
+# print(f"Time since start: {time.time() - start_time:.2f}s")
 
 
 # @functools.lru_cache(maxsize=None)

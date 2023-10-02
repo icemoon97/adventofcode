@@ -1,7 +1,4 @@
-from helper import *
-
 input_file = "input25.txt"
-
 # input_file = "input25test.txt"
 
 with open(input_file, "r") as file:

@@ -1,5 +1,5 @@
-from collections import deque
 from helper import *
+from collections import deque
 
 with open("input18.txt", "r") as file:
 	data = file.read().split("\n")

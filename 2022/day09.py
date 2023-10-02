@@ -1,6 +1,5 @@
 from helper import *
-
-import numpy
+import numpy as np
 
 with open("input09.txt", "r") as file:
 	data = file.read().split("\n")
@@ -13,7 +12,7 @@ def next_tail(head, tail):
 
 	diff = (head[0] - tail[0], head[1] - tail[1])
 
-	return (tail[0] + numpy.sign(diff[0]), tail[1] + numpy.sign(diff[1]))
+	return (tail[0] + np.sign(diff[0]), tail[1] + np.sign(diff[1]))
 	
 head = (0,0)
 knots = [(0,0) for _ in range(10)]

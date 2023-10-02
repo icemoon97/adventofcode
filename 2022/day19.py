@@ -1,9 +1,6 @@
 from helper import *
-
+from tqdm import tqdm
 import functools
-import time
-
-start_time = time.time()
 
 with open("input19.txt", "r") as file:
 	data = file.read().split("\n")
@@ -24,7 +21,6 @@ for line in data:
     max_costs = [max([c[0] for c in costs]), costs[2][1], costs[3][2], 9999]
     
     blueprints.append((costs, max_costs))
-
 
 def can_buy(cost, mats):
     return all([c <= m for c,m in zip(cost, mats)])
@@ -79,7 +75,8 @@ def sim(b_index, minutes, robots, mats):
 
 part1 = 0
 part2 = 1
-for i, b in enumerate(blueprints):
+bar = tqdm(blueprints)
+for i, b in enumerate(bar):
     best_g = 0
     geodes = sim(i, 24, (1,0,0,0), (0,0,0,0))
     part1 += (i+1) * geodes
@@ -88,9 +85,8 @@ for i, b in enumerate(blueprints):
         best_g = 0
         part2 *= sim(i, 32, (1,0,0,0), (0,0,0,0))
 
-    print(i, geodes, b[0])
+    bar.set_description(f"Blueprint {i} opens {geodes} geodes")
 
 print("Part 1:", part1)
 print("Part 2:", part2)
-print(f"=== Execution Time: {time.time() - start_time:.4f}s ===")
 

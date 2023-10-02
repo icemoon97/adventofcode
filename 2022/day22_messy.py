@@ -111,7 +111,7 @@ assert get_next((5, 0), (0, -1), 0) == ((5,0), 4, (0,1))
 assert get_next((49, 5), (1, 0), 0) == ((0,5), 2, (1,0))  
 assert get_next((5, 49), (0, 1), 0) == ((5,0), 1, (0,1))  
 
-
+# code for part 1
 # def get_next(pos, d):
 #     test = (pos[0] + d[0], pos[1] + d[1])
 #     if test not in grid:

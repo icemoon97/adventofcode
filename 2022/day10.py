@@ -27,5 +27,6 @@ for cycle, n in enumerate(instr):
     x += n
 
 print("Part 1:", part1)
+print("Part 2:")
 for line in screen:
     print("".join([x * 2 for x in line[1:]]))

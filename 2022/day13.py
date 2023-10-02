@@ -1,7 +1,6 @@
+from helper import *
 import functools
 import math
-
-from helper import *
 
 with open("input13.txt", "r") as file:
 	data = file.read().split("\n\n")

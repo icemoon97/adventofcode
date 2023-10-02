@@ -1,6 +1,5 @@
 from helper import *
 
-
 with open("input22.txt", "r") as file:
 	data = file.read().split("\n\n")
 
@@ -93,7 +92,7 @@ def get_next(pos, d):
 
 
 for move in moves:
-    print(move)
+    # print(move)
     if type(move) == int:
         d = dirs[dir_i]
         for _ in range(move):
@@ -104,8 +103,8 @@ for move in moves:
 
             if old[0] != pos:
                 r_test = get_next(pos, (-d[0], -d[1]))
-                print(f"actual: {old} -> {pos}, {d}")
-                print(f"r_test: {pos}, {(-d[0], -d[1])} -> {r_test}")
+                # print(f"actual: {old} -> {pos}, {d}")
+                # print(f"r_test: {pos}, {(-d[0], -d[1])} -> {r_test}")
                 assert r_test[0] == old[0]
     else:
         assert move == "L" or move == "R"
@@ -114,7 +113,7 @@ for move in moves:
         else:
             dir_i -= 1
         dir_i = dir_i % len(dirs)
-    print(pos, dirs[dir_i])
+    # print(pos, dirs[dir_i])
 
 print("end:", pos, dir_i)
 print("Part 2:", (pos[0] + 1) * 1000 + (pos[1] + 1) * 4 + dir_i)

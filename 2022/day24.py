@@ -2,7 +2,6 @@ from helper import *
 from queue import PriorityQueue
 
 input_file = "input24.txt"
-
 # input_file = "input24test.txt"
 
 with open(input_file, "r") as file:
