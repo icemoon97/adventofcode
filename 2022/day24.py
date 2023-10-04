@@ -65,8 +65,6 @@ bliz_sets = [set([x[0] for x in bliz])]
 def h(point, goal):
 	return abs(point[0] - goal[0]) + abs(point[1] - goal[1])
 
-best_cost = {p : 999999 for p in grid if grid[p] == "."}
-
 start = (0, 1)
 end = (len(data) - 1, len(data[0]) - 2)
 
