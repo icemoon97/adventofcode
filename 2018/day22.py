@@ -1,9 +1,9 @@
 data = [line.rstrip("\n") for line in open("input22.txt")]
 
-# depth = int(data[0][6:])
-# target = tuple(int(x) for x in data[1][7:].split(","))
-depth = 510
-target = (10, 10)
+depth = int(data[0][6:])
+target = tuple(int(x) for x in data[1][7:].split(","))
+# depth = 510
+# target = (10, 10)
 
 print(depth, target)
 
@@ -31,6 +31,7 @@ for x in range(target[0]+200):
 
 risk = {k: v % 3 for k, v in ero.items()}
 
+# prints risk map
 # for y in range(target[0] + 1):
 #     for x in range(target[1] + 1):
 #         r = risk[(x, y)]
@@ -43,12 +44,6 @@ risk = {k: v % 3 for k, v in ero.items()}
 #     print()
 
 # print("Part 1:", sum(risk.values()))
-
-# clearly a search problem, A* is probably necessary because of all the tool switching?
-# also need to generate grid larger than target, 2x is probably fine?
-
-# tools: neither=0, torch=1, climbing=2
-# if tool==risk, cannot move
 
 from queue import PriorityQueue
 
@@ -63,27 +58,30 @@ def h(point, end):
 queue = PriorityQueue()
 queue.put((h(start, target), 0, start, starting_tool))
 
-# steps, pos, tool
-seen = set()
-seen.add((0, start, starting_tool))
+# pos, tool -> steps
+best = {}
 
+max_search = 10000000
 searched = 0
 while not queue.empty():
     searched += 1
-    if searched % 100000 == 0:
-        print(searched)
-    if searched > 10000000:
+    if searched > max_search:
         print("searched too many states, exiting")
         break
 
     _, steps, cur, cur_tool = queue.get()
 
     if cur == target:
-        print("reached target!", steps)
-        print("final tool:", cur_tool)
+        # need to switch to torch to finish
         if cur_tool == 2:
             steps += 7
+        print("Part 2:", steps)
         break
+
+    state = (cur, cur_tool)
+    if state in best and best[state] <= steps:
+        continue
+    best[state] = steps
 
     # try moving in all directions
     for d in [(1,0), (0,1), (-1,0), (0,-1)]:
@@ -93,12 +91,8 @@ while not queue.empty():
             continue
         if cur_tool == risk[test]:
             continue
-        if (steps + 1, test, cur_tool) in seen:
-            continue
-
         h_test = steps + 1 + h(test, target)
 
-        seen.add((steps + 1, test, cur_tool))
         queue.put((h_test, steps + 1, test, cur_tool))
         
     # try switching tools
@@ -107,14 +101,8 @@ while not queue.empty():
             continue
         if test_tool == risk[cur]:
             continue
-        if (steps + 7, cur, test_tool) in seen:
-            continue
 
         h_test = steps + 7 + h(cur, target)
 
-        seen.add((steps + 7, cur, test_tool))
         queue.put((h_test, steps + 7, cur, test_tool))
-
-
-print(steps)
 
