@@ -1,56 +1,48 @@
 with open("input02.txt", "r") as file:
     data = file.read().split("\n")
 
-start = {"red": 0, "green": 0, "blue": 0}
+def part1(data):
+    start = {"red": 12, "green": 13, "blue": 14}
 
-# total = 0
-# for line in data:
-#     game, cubes = line.split(":")
-#     s = cubes.split(";")
+    total = 0
+    for line in data:
+        game, info = line.split(":")
+        game_id = int(game.split()[1])
 
-#     game_id = int(game.split()[1])
+        possible = True
 
-#     possible = True
+        for group in info.split(";"):
+            current = start.copy()
 
-#     for group in s:
-#         current = start.copy()
+            for cubes in group.split(","):
+                n, color = cubes.split()
+                current[color] -= int(n)
 
-#         for item in group.split(","):
-#             n, color = item.split()
-#             n = int(n)
+            if any(val < 0 for val in current.values()):
+                possible = False
 
-#             current[color] -= n
+        if possible:
+            total += game_id
 
-#         if any(val < 0 for val in current.values()):
-#             possible = False
+    return total
 
-#     if possible:
-#         print(game_id)
-#         total += game_id
+def part2(data):
+    start = {"red": 0, "green": 0, "blue": 0}
 
-total = 0
-for line in data:
-    game, cubes = line.split(":")
-    s = cubes.split(";")
+    total = 0
+    for line in data:
+        _, info = line.split(":")
+        current = start.copy()
 
-    game_id = int(game.split()[1])
+        for group in info.split(";"):
+            for cubes in group.split(","):
+                n, color = cubes.split()
+                current[color] = max(int(n), current[color])
 
-    current = start.copy()
+        score = current["red"] * current["green"] * current["blue"]
+        total += score
 
-    for group in s:
-        
+    return total
 
-        for item in group.split(","):
-            n, color = item.split()
-            n = int(n)
-
-            current[color] = max(n, current[color])
-
-    print(current)
-
-    score = current["red"] * current["green"] * current["blue"]
-    print(score)
-
-    total += score
-
-print(total)
+print("Part 1:", part1(data))
+print("Part 2:", part2(data))
