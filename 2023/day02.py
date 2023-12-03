@@ -2,8 +2,6 @@ with open("input02.txt", "r") as file:
     data = file.read().split("\n")
 
 def part1(data):
-    start = {"red": 12, "green": 13, "blue": 14}
-
     total = 0
     for line in data:
         game, info = line.split(":")
@@ -12,7 +10,7 @@ def part1(data):
         possible = True
 
         for group in info.split(";"):
-            current = start.copy()
+            current = {"red": 12, "green": 13, "blue": 14}
 
             for cubes in group.split(","):
                 n, color = cubes.split()
@@ -20,6 +18,7 @@ def part1(data):
 
             if any(val < 0 for val in current.values()):
                 possible = False
+                break
 
         if possible:
             total += game_id
@@ -27,12 +26,10 @@ def part1(data):
     return total
 
 def part2(data):
-    start = {"red": 0, "green": 0, "blue": 0}
-
     total = 0
     for line in data:
         _, info = line.split(":")
-        current = start.copy()
+        current = {"red": 0, "green": 0, "blue": 0}
 
         for group in info.split(";"):
             for cubes in group.split(","):
