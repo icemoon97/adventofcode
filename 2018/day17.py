@@ -1,37 +1,83 @@
 from collections import defaultdict
-from queue import Queue
+
+def min_max(l):
+    return min(l), max(l)
+
+def parse_ints(s: str):
+    s = "".join([c if c.isdigit() or c == "-" else " " for c in s])
+    s = [int(x) for x in s.split()]
+    return s
 
 data = [line.rstrip("\n") for line in open("input17.txt")]
 
-# grid = defaultdict(lambda: defaultdict(lambda: ""))
-clay = set()
-min_y, max_y = 9999999999, -99999999999
+grid = defaultdict(lambda: " ")
 
 for line in data:
-    line = line.split()
-    first = int(line[0][line[0].index("=")+1:-1])
-    second = line[1][line[1].index("=")+1:].split("..")
+    a, b, c = parse_ints(line)
+
+    if line[0] == "x":
+        for i in range(b, c+1):
+            grid[(a, i)] = "#"
+    else:
+        for i in range(b, c+1):
+            grid[(i, a)] = "#"
+
+y_bound = min_max([x[1] for x in grid])
+
+print(y_bound)
+
+start = (500, 0)
+queue = [start]
+
+def settle(cx, cy, dir):
+    while grid[(cx + dir, cy)] != "#":
+        cx += dir
+        under = grid[(cx, cy + 1)]
+        if under == " ":
+            queue.append((cx, cy))
+            return cx, True
+        elif grid[(cx, cy)] == "|" and under == "|":
+            return cx, True
     
-    if line[0][0] == "x":
-        for i in range(int(second[0]), int(second[1])+1):
-            # grid[first][i] = "#"
-            clay.add((first, i))
-            min_y = min(min_y, i)
-            max_y = max(max_y, i)
-    elif line[0][0] == "y":
-        min_y = min(min_y, first)
-        max_y = max(max_y, first)
-        for i in range(int(second[0]), int(second[1])+1):
-            # grid[i][first] = "#"
-            clay.add((i, first))
+    return cx, False
 
-print(min_y, max_y)
+while queue:
+    cx, cy = queue.pop(0)
+    # print(cx, cy)
 
-start = (0, 500)
+    if cy > y_bound[1]:
+        continue
 
-water = set()
+    if grid[(cx, cy)] in "~":
+        continue
 
-fringe = Queue()
-fringe.put(start)
+    if grid[(cx, cy + 1)] in "#~":
+        # look left
+        # look right
+        left, left_o = settle(cx, cy, -1)
+        right, right_o = settle(cx, cy, 1)
+
+        if not left_o and not right_o:
+            queue.append((cx, cy - 1))
+
+        for i in range(left, right+1):
+            grid[(i, cy)] = "|" if (left_o or right_o) else "~"
+
+    else:
+        grid[(cx, cy)] = "|"
+        queue.append((cx, cy + 1))
 
 
+def print_grid(grid):
+    x_bound = min_max([x[0] for x in grid])
+
+    for i in range(y_bound[0], y_bound[1]+1):
+        for j in range(x_bound[0], x_bound[1]+1):
+            print(grid[(j, i)], end="")
+        print()
+        
+print_grid(grid)
+
+
+tiles = sum(k[1] >= y_bound[0] and k[1] <= y_bound[1] and v in "~|" for k, v in grid.items())
+print("Part 1:", tiles)
