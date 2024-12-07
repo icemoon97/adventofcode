@@ -1,22 +1,28 @@
 from pathlib import Path
 
-def try_calc(nums, cur, target):
+add = lambda x,y: x + y
+mul = lambda x,y: x * y
+concat = lambda x,y: int(str(x) + str(y))
+
+def try_calc(nums, cur, target, ops=[add, mul]):
+    # minor optimization
+    if cur > target:
+        return False
     if not len(nums):
         return cur == target
 
-    n = nums[0]
-
-    add = try_calc(nums[1:], cur + n, target)
-    mul = try_calc(nums[1:], cur * n, target)
-    cat = try_calc(nums[1:], int(str(cur) + str(n)), target)
-
-    return add or mul or cat
+    for op in ops:
+        if try_calc(nums[1:], op(cur, nums[0]), target, ops):
+            return True
+        
+    return False
         
 def main(input_path: Path):
     with open(input_path, "r") as file:
         data = file.read().split("\n")
 
-    total = 0
+    part1 = 0
+    part2 = 0
 
     for line in data:
         target, nums = line.split(": ")
@@ -25,9 +31,12 @@ def main(input_path: Path):
         nums = list(map(int, nums.split()))
 
         if try_calc(nums[1:], nums[0], target):
-            total += target
+            part1 += target
+        if try_calc(nums[1:], nums[0], target, ops=[add, mul, concat]):
+            part2 += target
 
-    print(total)
+    print(part1)
+    print(part2)
 
 if __name__ == "__main__":
     DAY = 7
