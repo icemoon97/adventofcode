@@ -1,93 +1,70 @@
+from pathlib import Path
+from collections import defaultdict
 
-import functools
-import collections
-import itertools
-import numpy as np
-from math import prod
-from copy import deepcopy
-
-# returns list of all ints in given string (works with negatives, not decimals)
-def parse_ints(s: str):
-    s = "".join([c if c.isdigit() or c == "-" else " " for c in s])
-    s = [int(x) for x in s.split()]
-    return s
-
-def min_max(l):
-    return min(l), max(l)
-
-# N, E, S, W
 DIRS = [(-1,0), (0,1), (1,0), (0,-1)]
 
-from pathlib import Path
-
-# DIM = (7, 7)
-DIM = (71, 71)
-
-def search(grid):
-    finished = False
-
-    queue = [(0, (0, 0))]
+def search(grid, dim):
     visited = set()
-    while queue:
+    queue = [(0, (0, 0))]
 
+    while queue:
         steps, cur = queue.pop(0)
 
         if cur in visited:
             continue
         visited.add(cur)
 
-        if cur == (DIM[0]-1, DIM[1]-1):
-            # print(steps)
-            finished = True
-            break
+        if cur == dim:
+            return True, steps
 
         for dx, dy in DIRS:
             test = (cur[0] + dx, cur[1] + dy)
 
-            if test[0] < 0 or test[0] >= DIM[0] or test[1] < 0 or test[1] >= DIM[1]:
+            if test[0] < 0 or test[0] > dim[0] or test[1] < 0 or test[1] > dim[1]:
                 continue
 
             if grid[test] == ".":
                 queue.append((steps + 1, test))
 
-    return finished
+    return False, -1
 
-def main(input_path: Path):
+def sim(blocks: list[tuple[int, int]], part2: bool):
+    if part2:
+        dim = (70, 70)
+        block_num = 1024
+    else:
+        dim = (6, 6)
+        block_num = 12
+
+    grid = defaultdict(lambda: ".")
+
+    for b in blocks[:block_num-1]:
+        grid[b] = "#"
+
+    for i in range(block_num-1, len(blocks)):
+        b = blocks[i]
+
+        grid[b] = "#"
+        is_path, steps = search(grid, dim)
+
+        if i == block_num-1:
+            print("Part 1:", steps)
+
+        if not is_path:
+            print("Part 2:", b)
+            break
+
+def main(input_path: Path, part2: bool=True):
     with open(input_path, "r") as file:
         data = file.read().split("\n")
 
-    bs = []
-    for line in data:
+    blocks = [tuple(map(int, line.split(","))) for line in data]
 
-        nums = parse_ints(line)
-
-        # print(nums)
-
-        bs.append(tuple(nums))
-
-    print(len(bs))
-
-    grid = collections.defaultdict(lambda: ".")
-    # for b in bs[:1024]:
-    #     grid[b] = "#"
-
-    for i, b in enumerate(bs):
-        grid[b] = "#"
-
-        is_path = search(grid)
-
-        # print(i, b, is_path)
-
-        if not is_path:
-            print(i, b)
-            break
-
-
-
+    sim(blocks, part2=part2)
 
 if __name__ == "__main__":
     DAY = 18
     print("===== Tests =====")
-    main(f"tests/day{DAY:02}.txt")
+    main(f"tests/day{DAY:02}.txt", part2=False)
     print("===== Input =====")
     main(f"inputs/day{DAY:02}.txt")
