@@ -1,20 +1,5 @@
-
-import heapq
-import functools
 import collections
 import itertools
-import numpy as np
-from math import prod
-from copy import deepcopy
-
-# returns list of all ints in given string (works with negatives, not decimals)
-def parse_ints(s: str):
-    s = "".join([c if c.isdigit() or c == "-" else " " for c in s])
-    s = [int(x) for x in s.split()]
-    return s
-
-def min_max(l):
-    return min(l), max(l)
 
 # N, E, S, W
 DIRS = [(-1,0), (0,1), (1,0), (0,-1)]
@@ -56,57 +41,36 @@ def main(input_path: Path):
                 char = '.'
             grid[(i,j)] = char
 
-    print(start, end)
-
-    # steps, pos, skip_mode, skip_loc
-    queue = [(0, start, False, tuple())]
-    visited = set()
+    normal_steps = search_normal(grid, start)
 
     results = collections.defaultdict(lambda: 0)
 
-    normal_steps = search_normal(grid, start)
-    no_cheat = normal_steps[end]
-    print("no cheat:", no_cheat)
-
-    while queue:
-
-        steps, cur, skip_mode, skip_loc = heapq.heappop(queue)
-
-        if normal_steps[cur] < steps:
+    open_pos = [p for p in grid if grid[p] == "."]
+    for p1, p2 in itertools.combinations(open_pos, 2):
+        if grid[p1] != "." or grid[p2] != ".":
             continue
 
-        state = (cur, skip_mode, skip_loc)
-        if state in visited:
-            continue
-        visited.add(state)
+        dist = abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])
 
-        if cur == end:
-            saves = no_cheat - steps
-            # print(f"skip: {skip_loc}, save {saves}")
-            # if saves > 50:
-            #     print(cur, steps, skip_mode, skip_loc)
+        if dist > 20:
+            continue
+
+        steps1 = normal_steps[p1]
+        steps2 = normal_steps[p2]
+
+        saves = abs(steps1 - steps2) - dist
+        if saves >= 50 and saves < 999999:
             results[saves] += 1
 
-        for dx, dy in DIRS:
-            test = (cur[0] + dx, cur[1] + dy)
+    for k, v in sorted(results.items()):
+        print(f"saves {k}: {v}")
 
-            if test not in grid:
-                continue
+    total = 0
+    for k, v in results.items():
+        if k >= 100:
+            total += v
 
-            if skip_mode and grid[test] == ".":
-                queue.append((steps+1, test, False, (*skip_loc, test)))
-
-            else:
-
-                if grid[test] == ".":
-                    queue.append((steps+1, test, skip_mode, skip_loc))
-                elif grid[test] == "#" and len(skip_loc) == 0:
-                    queue.append((steps+1, test, True, (test,)))
-
-    print(results)
-        
-
-
+    print(total)
 
 
 if __name__ == "__main__":
