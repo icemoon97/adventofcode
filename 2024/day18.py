@@ -4,15 +4,13 @@ from collections import defaultdict
 DIRS = [(-1,0), (0,1), (1,0), (0,-1)]
 
 def search(grid, dim):
-    visited = set()
-    queue = [(0, (0, 0))]
+    start = (0, 0)
+
+    visited = {start}
+    queue = [(0, start)]
 
     while queue:
         steps, cur = queue.pop(0)
-
-        if cur in visited:
-            continue
-        visited.add(cur)
 
         if cur == dim:
             return True, steps
@@ -22,19 +20,22 @@ def search(grid, dim):
 
             if test[0] < 0 or test[0] > dim[0] or test[1] < 0 or test[1] > dim[1]:
                 continue
+            if grid[test] != ".":
+                continue
 
-            if grid[test] == ".":
+            if test not in visited:
+                visited.add(test)
                 queue.append((steps + 1, test))
 
     return False, -1
 
-def sim(blocks: list[tuple[int, int]], part2: bool):
-    if part2:
-        dim = (70, 70)
-        block_num = 1024
-    else:
+def sim(blocks: list[tuple[int, int]], test_input: bool = False):
+    if test_input:
         dim = (6, 6)
         block_num = 12
+    else:
+        dim = (70, 70)
+        block_num = 1024
 
     grid = defaultdict(lambda: ".")
 
@@ -54,17 +55,17 @@ def sim(blocks: list[tuple[int, int]], part2: bool):
             print("Part 2:", b)
             break
 
-def main(input_path: Path, part2: bool=True):
+def main(input_path: Path, test_input: bool = False):
     with open(input_path, "r") as file:
         data = file.read().split("\n")
 
     blocks = [tuple(map(int, line.split(","))) for line in data]
 
-    sim(blocks, part2=part2)
+    sim(blocks, test_input)
 
 if __name__ == "__main__":
     DAY = 18
     print("===== Tests =====")
-    main(f"tests/day{DAY:02}.txt", part2=False)
+    main(f"tests/day{DAY:02}.txt", test_input=True)
     print("===== Input =====")
     main(f"inputs/day{DAY:02}.txt")
